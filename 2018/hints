@@ -1,0 +1,11 @@
+Ctrl-Shift-B
+
+node (ls -Exclude node_modules | %{ ls $_ -Recurse -Filter *.js} | select -ExpandProperty FullName -Last 1)
+
+$watch = New-Object IO.FileSystemWatcher (Get-Location).path, '*.js' -Property @{NotifyFilter =[IO.NotifyFilters]'FileName, LastWrite'}
+$onCreated = Register-ObjectEvent $watch Changed -Action { write-verbose $Event.SourceEventArgs.FullPath; & node $Event.SourceEventArgs.FullPath | write-host }
+
+single malt
+computer help
+jag
+helicopter
