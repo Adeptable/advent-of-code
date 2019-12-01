@@ -5,6 +5,8 @@ node (ls -Exclude node_modules | %{ ls $_ -Recurse -Filter *.js} | select -Expan
 $watch = New-Object IO.FileSystemWatcher (Get-Location).path, '*.js' -Property @{NotifyFilter =[IO.NotifyFilters]'FileName, LastWrite'}
 $onCreated = Register-ObjectEvent $watch Changed -Action { write-verbose $Event.SourceEventArgs.FullPath; & node $Event.SourceEventArgs.FullPath | write-host }
 
+function regRun($folderName){ $onCreated = Register-ObjectEvent ( New-Object IO.FileSystemWatcher ((Get-Location).path + '\' + $folderName), '*.js' -Property @{NotifyFilter =[IO.NotifyFilters]'FileName, LastWrite'}) Changed -Action { write-verbose $Event.SourceEventArgs.FullPath; & node $Event.SourceEventArgs.FullPath | write-host }; unregister-event ($onCreated.id -1)}
+
 single malt
 computer help
 jag
